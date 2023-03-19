@@ -6,17 +6,24 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.util.List;
-
-
+import java.util.Date;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Document(collection = "dayschedules")
-public class DaySchedule {
-    // day code will be DDMMYYYY
+@Document(collection = "trucks")
+public class Truck {
     @Id
-    String dayCode;
+    String id;
+    String name;
 
-    List<String> trucks;
+    Date startDate;
+    Date endDate;
+
+    boolean sunday;
+    boolean monday;
+    boolean tuesday;
+    boolean wednesday;
+    boolean thursday;
+    boolean friday;
+    boolean saturday;
 }
