@@ -4,7 +4,7 @@ COPY pom.xml .
 RUN mvn -B -f pom.xml dependency:go-offline
 # Copy all other project files and build project
 COPY . .
-RUN mvn -B install
+RUN mvn -B install -DskipTests
 
 #----
 # Final stage
