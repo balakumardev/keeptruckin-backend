@@ -6,11 +6,10 @@ import dev.balakumar.keeptruckin.model.Truck;
 import dev.balakumar.keeptruckin.service.TruckService;
 import io.micrometer.common.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.List;
 
 @RestController
@@ -18,19 +17,21 @@ public class DayController {
     @Autowired
     TruckService truckService;
 
+    /* creates a truck document with the given info from the request body */
     @PostMapping("/api/truck")
-    ResponseEntity<Void> postTruck(@RequestBody NewTruckDto request) throws URISyntaxException {
+    ResponseEntity<Void> postTruck(@RequestBody NewTruckDto request) {
 
         if (request.getEndDate() == null || StringUtils.isBlank(request.getTruckName()))
             return ResponseEntity.badRequest().build();
 
         truckService.addTruck(request);
 
-        return ResponseEntity.created(new URI("")).build();
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
+    /* updates the existing truck record with the given info */
     @PutMapping("/api/truck")
-    ResponseEntity<Void> updateTruck(@RequestBody UpdateTruckDto request) throws URISyntaxException {
+    ResponseEntity<Void> updateTruck(@RequestBody UpdateTruckDto request) {
 
         if (StringUtils.isBlank(request.getOldName()) || StringUtils.isBlank(request.getNewName()))
             return ResponseEntity.badRequest().build();
@@ -42,13 +43,9 @@ public class DayController {
     }
 
 
+    /* retrieves the list of trucks that operate on the current day */
     @GetMapping("/api/schedule/today")
     ResponseEntity<List<Truck>> getTrucksForToday() {
         return ResponseEntity.ok(truckService.getTodaysSchedule());
-    }
-
-    @GetMapping("/api/schedule/hello")
-    ResponseEntity<String> hello() {
-        return ResponseEntity.ok("nopes");
     }
 }
